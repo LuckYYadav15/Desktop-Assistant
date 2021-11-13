@@ -1,16 +1,13 @@
 # Desktop-Assistant
 <br />
 <div align="center">
-<!--   <a href="https://github.com/keshavjha018/Desktop_Assistant_Project">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
-  </a> -->
 
   <h3 align="center">Desktop Assistant Project</h3>
 
   <p align="center">
     Automates the boring tasks for you & Saves your time
     <br />
-    <a href="https://github.com/keshavjha018/Desktop_Assistant_Project/issues"><strong>Suggest a feature »</strong></a>
+    <a href="https://github.com/LuckYYadav15/Desktop-Assistant/issues"><strong>Suggest a feature »</strong></a>
     <br />
     <br />
     
@@ -88,8 +85,6 @@ It will  do most of the tasks on voice command like :
 
 As of now we are still working on maximizing the tasks it can do and add more and more functionality to it.
 
-
-_For more examples about automation and selenium, please see my other repo [Automation by Keshav](https://github.com/keshavjha018/Web_Automation)_
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
