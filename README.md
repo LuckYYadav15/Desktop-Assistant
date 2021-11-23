@@ -70,6 +70,7 @@ There are some requirements for running these programs in any system, Your syste
 * pip
   ```sh
   pip install selenium
+  pip install requirements.txt
   ```
   
   
