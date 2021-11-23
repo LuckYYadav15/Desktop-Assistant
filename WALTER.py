@@ -1,5 +1,49 @@
 from features import *
 
+state = ""
+chat = []
+chat_prev = []
+
+def chatWalter(query):
+    global chat_prev
+    chat_prev = chat.copy()
+    chat.append("Walter: " + query)
+
+def chatUser(query):
+    global chat_prev
+    chat_prev = chat.copy()
+    chat.append("User: " + query)
+    sleep(1)
+
+def speak(audio):
+    # defining the speak function so that our assistant can speak any string given as input
+    engine = pyttsx3.init('sapi5')  # defining the engine to speak given string
+    voice = engine.getProperty('voices')
+    # seting voice of any inbuilt system voice like David/Zeera
+    engine.setProperty('voice', voice[0].id)
+    # print(voice[0])     # to know the no of voices in system
+    engine.setProperty('rate', 188)  # set the speed of voice
+    global state
+    state = "Speaking..."
+    engine.say(audio)
+    print(audio)
+    chatWalter(audio)
+    # Runs an event loop until all commands queued up until this method call complete
+    engine.runAndWait()
+
+def wishMe():
+    #function wishme will wish the user according to the time and weather
+    # declaring the hour variable to  get the current hour
+    hour = int(datetime.datetime.now().hour)
+    # declaring the strTime variable to  get the current time according to mearidain
+    strTime = datetime.datetime.now().strftime("%I:%M %p")
+    if hour >= 0 and hour < 12:
+        speak("Hello sir, Good Morning." )
+    elif hour >= 12 and hour < 18:
+        speak("Hello sir, Good Afternoon.")
+    else:
+        speak("Hello sir, Good Evening.")
+
 class MainThread(QThread):
     def __init__(self) -> None:
         self.x = 1
@@ -8,7 +52,7 @@ class MainThread(QThread):
     def run(self):
         wishMe()
         self.task()
-
+    
     def takecomand(self):
         #Defining function to take the voice as input and converting it to text
         take = sr.Recognizer()
@@ -38,17 +82,45 @@ class MainThread(QThread):
 
     def task(self):
         # running the while loop infinite times
+        global chat
         while True:
             self.query = self.takecomand()
-            #if user chats (conversation)
-            chatresponse = chat_bot(self.query)
 
-            #if not in chatbot
-            #greet and perform task simultaneously - (can run multiple command at once)
+            #if user asks intro/greet
+            if self.query in command_info:
+                speak(listToString(random.choices(info)))
+            
+            elif self.query in command_greet:
+                speak(listToString(random.choices(greet)))
+            
+            elif self.query in chat_1:
+                speak(listToString(random.choices(chat_1_replay)))                                
+            
+            elif self.query in chat_2:
+                speak(listToString(random.choices(chat_2_replay)))                            
+            
+            elif self.query in chat_3:
+                speak(listToString(random.choices(chat_3_replay)))                                
+            
+            elif self.query in chat_4:
+                speak(listToString(random.choices(chat_4_replay)))
+
+            #greet and perform task simultaneously
             #eg- hello walter, what is the temperature?
-            if chatresponse == 0:
-                self.query = greetAndWork(self.query)
-
+            #eg- good morning walter, how is the weather?
+            elif 'hello' in self.query or 'hi' in self.query or 'good morning' in self.query:
+                wishMe()
+                #replacing unnecessary key words from query
+                self.query = self.query.replace("hello", "")
+                self.query = self.query.replace("hi", "")
+                self.query = self.query.replace("good morning", "")
+                self.query = self.query.replace("walter", "")
+                #correcting mispronounciations
+                #sometimes it misunderstands 'Walter' as these: (due to indian accent)
+                self.query = self.query.replace("water", "")
+                self.query = self.query.replace("walton", "")
+                self.query = self.query.replace("wallpaper", "")
+            
             if 'open youtube' in self.query or 'launch youtube' in self.query:
                 speak(listToString(random.choices(['Opening Youtube', 'Launching Youtube'])))
                 # taking the link of youtube from the folder url.txt using access.py file
@@ -83,48 +155,21 @@ class MainThread(QThread):
                 speak("Today is " + self.day + '. ' + self.d2)
 
             elif 'the time' in self.query:
-                # declaring the strTime variable to  get the current time according to mearidain
                 self.strTime = datetime.datetime.now().strftime("%I %M %p")
-                speak("Sir, The current time is " + self.strTime)
+                speak("Sir, The time is " + self.strTime)
 
             elif 'open notepad' in self.query or 'launch notepad' in self.query:
-                speak(listToString(random.choices(['Opening Notepad', 'Launching Notepad'])))
+                speak(listToString(random.choices(['Opening Notpad', 'Launching Notpad'])))
                 os.startfile(access.path("notepad_path"))
 
             elif 'open vs code' in self.query or 'launch vs code' in self.query:
                 speak(listToString(random.choices(['Opening VS Code', 'Launching VS Code'])))
                 self.codepath=access.path("vs_code_path")
                 os.startfile(self.codepath)
-
-            #you must have already logged in (in your default browser)
-            elif 'twitter' in self.query and 'open' in self.query:
-                speak("Opening Twitter..")
-                webbrowser.open_new_tab(access.url("twitter_url"))
-                
-            elif 'instagram' in self.query and 'open' in self.query:
-                speak("Opening Instagram..")
-                webbrowser.open_new_tab(access.url("insta_url"))
-                
-            elif 'github' in self.query and 'open' in self.query:
-                speak("Opening Github..")
-                webbrowser.open_new_tab(access.url("github_url"))
-                
-            elif 'linkedin' in self.query and 'open' in self.query:
-                speak("Opening LinkedIn..")
-                webbrowser.open_new_tab(access.url("linkedin_url"))
-                
-            elif 'gmail' in self.query and 'open' in self.query:
-                speak("Opening Gmail..")
-                webbrowser.open_new_tab(access.url("gmail_url"))
-
-            #if not logged in
-            elif 'twitter' in self.query and 'login' in self.query:
-                twitterlogin()
                 
             elif 'screenshot' in self.query or 'take a screenshot' in self.query:
                 cwd = os.getcwd()
-                pyautogui.screenshot(cwd + r'\image\Screenshot' + str(self.x)+'.png')
-                speak("Screenshot is saved as image" + str(self.x))
+                pyautogui.screenshot(cwd + r'\Screenshots\image' + str(self.x)+'.png')
                 self.x += 1
 
             elif 'temperature' in self.query:
@@ -145,7 +190,6 @@ class MainThread(QThread):
                 self.query = self.query.replace("google", "")
                 speak("Showing the search results for" + self.query)
                 googlesearch(self.query)
-            
             elif "near" in self.query or 'nearby' in self.query:
                 speak(nearby(self.query))
                 # chat.append("Walter: "+ nearby(self.query))   #adding msg to chatbox
@@ -176,23 +220,6 @@ class MainThread(QThread):
                 except Exception as e:
                     speak("Sorry sir. I am not able to send right now")
             
-            elif 'join meet' in self.query or 'create a meet' in self.query or 'create a new meet' in self.query or 'join my class' in self.query:
-                obj = meet()
-                if 'new meet' in self.query or 'create a meet' in self.query:
-                    speak("Sir please wait a while i am login your mail")
-                    obj.login()
-                    speak("Creating a new meet")
-                    obj.creat_meet()
-                else:
-                    a = obj.check_class()
-                    if a == 0:
-                        obj.close()
-                    else:
-                        obj.login()
-                        obj.join_link()
-                        if a == 1:
-                            obj.join()
-
             elif "my location" in self.query or "where am i" in self.query or "current location" in self.query:
                 try:
                     ci, st, co = my_location()
@@ -222,6 +249,26 @@ class MainThread(QThread):
                     res = "Sorry sir, I couldn't get the location. Please try again"
                     speak(res)
 
+            elif self.query in command_quit:
+                speak(listToString(random.choices(command_quit_replay)))
+                speakonly("3")
+                speakonly("2")
+                speakonly("1")
+                sys.exit()
+
+            elif "open whatsapp" in self.query:
+                from Whatsapp import openWhatsapp
+                openWhatsapp()
+            
+            elif "minimise whatsapp" in self.query:
+                from Whatsapp import minimizeWhatsapp
+                minimizeWhatsapp()
+            
+            elif "close whatsapp" in self.query:
+                from Whatsapp import closeWhatsapp
+                closeWhatsapp()
+                speak("Whatsapp closed")
+
             elif "whatsapp message" in self.query:
                 self.query = self.query.replace("whatsapp", "")
                 self.query = self.query.replace("message", "")
@@ -239,9 +286,9 @@ class MainThread(QThread):
                 self.query = self.query.replace("whatsapp", "")
                 self.query = self.query.replace("to", "")
                 self.Name = str(self.query)
-                WhatsappVideo(self.Name)
                 speak(f"Making Video call to {self.Name}")
                 from Whatsapp import WhatsappVideo
+                WhatsappVideo(self.Name)
                 speak("Video Call ended")
 
             elif "call" in self.query:
@@ -265,17 +312,18 @@ class MainThread(QThread):
                 from Whatsapp import WhatsappOpenChat
                 WhatsappOpenChat(self.Name)
 
-            elif "create group" in self.query:
+            elif "create a group" in self.query:
                 self.query = self.query.replace("and", " ")
-                self.Name = list(self.query.split(" "))
+                speak("Please name the members to be added")
+                self.query = self.takecomand()
+                self.Names = list(self.query.split(" "))
+                speak(f"Whats the name for group")
+                self.grp_name = self.takecomand()
                 from Whatsapp import WhatsappGroup
-                WhatsappGroup(self.Name)
+                WhatsappGroup(self.Names, self.grp_name)
+                speak(f"Group named {self.grp_name} is created")
 
-            elif self.query in command_quit:
-                speak(listToString(random.choices(command_quit_replay)) + " in 3 seconds")
-                speak("3, 2, 1")
-                sys.exit()
-            
+
     
 startexecution = MainThread()
 
