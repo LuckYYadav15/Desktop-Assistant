@@ -1,0 +1,2 @@
+Reciver_name,Reciver_mail
+"friend","20bcs033@iiitdwd.ac.in"
