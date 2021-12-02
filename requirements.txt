@@ -1,0 +1,16 @@
+selenium
+PyQt5
+pyttsx3
+speak
+SpeechRecognition
+PyAutoGUI
+Pillow
+requests
+html5lib
+bs4
+PyWikiHow
+pywhatkit
+geopy
+geocoder
+pyjokes
+PyAudio
