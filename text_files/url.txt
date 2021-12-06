@@ -1,0 +1,4 @@
+url,"link"
+gmail_url,"http://www.gmail.com"
+sign_in_url,"https://accounts.google.com/signin/v2/identifier?flowName=GlifWebSignIn&flowEntry=ServiceLogin"
+classroom_url,"https://classroom.google.com/"
