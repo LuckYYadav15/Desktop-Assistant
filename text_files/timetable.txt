@@ -1,0 +1,8 @@
+day/time_slot,slot1,slot2,slot3,slot4,slot5,slot6,slot7
+Monday,Probability,Discrete Mathematics,Industrial Social Psychology,Design and Analysis of Algorithm,break,Computer Architecture Lab,Computer Architecture Lab
+Tuesday,Discrete Mathematics,Probability,Design and Analysis of Algorithm,Object Oriented programing,break,Industrial Social Psychology,Discrete Mathematics Tutorial
+Wednesday,Object Oriented programing,Industrial Social Psychology,Probability,Computer Architecture,break,Design and Analysis of Algorithm Lab,Design and Analysis of Algorithm Lab
+Thrusday,Computer Architecture,Object Oriented programing,Discrete Mathematics,Design and Analysis of Algorithm,break,Object Oriented programing Lab,Object Oriented programing Lab
+Friday,Design and Analysis of Algorithm,Computer Architecture,break,break,break,Probability Tutorial,break
+Saturday,Holiday,Holiday,Holiday,Holiday,Holiday,Holiday,Holiday
+Sunday,Holiday,Holiday,Holiday,Holiday,Holiday,Holiday,Holiday

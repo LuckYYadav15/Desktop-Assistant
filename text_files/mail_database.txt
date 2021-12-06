@@ -1,0 +1,2 @@
+Reciver_name,Reciver_mail
+"friend","vaghanibrij222@gmail.com"
