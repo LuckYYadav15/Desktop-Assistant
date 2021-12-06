@@ -6,7 +6,7 @@
   <p align="center">
     Virtual Assistant which can control & automate your PC on voice commands.
     <br />
-    <a href="https://github.com/keshavjha018/Desktop_Assistant_Project/issues"><strong>Suggest a feature »</strong></a>
+    <a href="https://github.com/LuckYYadav15/Desktop-Assistant/issues"><strong>Suggest a feature »</strong></a>
     <br />
     <br />
     
