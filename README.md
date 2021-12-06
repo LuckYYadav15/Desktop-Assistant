@@ -1,13 +1,12 @@
-# Desktop-Assistant
-<br />
+# Desktop-Assistant<br />
 <div align="center">
 
   <h3 align="center">Desktop Assistant Project</h3>
 
   <p align="center">
-    Automates the boring tasks for you & Saves your time
+    Virtual Assistant which can control & automate your PC on voice commands.
     <br />
-    <a href="https://github.com/LuckYYadav15/Desktop-Assistant/issues"><strong>Suggest a feature »</strong></a>
+    <a href="https://github.com/keshavjha018/Desktop_Assistant_Project/issues"><strong>Suggest a feature »</strong></a>
     <br />
     <br />
     
@@ -41,21 +40,34 @@
 
 ## About The Project
 
-- This is a group project called Desktop Assistant, developed for OOP Course, 3rd Semester, IIIT Dharwad.
-- Made via Python based Selenium framework, the project automates the repetative and boring tasks in our daily life.
-- It takes voice command and follows to automate them, just like your personal assistant for Desktop.
-- Currently we are working for windows based machines, but we aim to make it available for Mac & Linux systems too in future.
+- This is a group project called Desktop Assistant, developed by a small group of students of IIIT Dharwad under OOP course.
+- Made via Python based libraries & frameworks like Selenium, PyQt5 etc, this virtual assistant can engage in two-way conversations.
+- Offers voice commands, voice searching and controlling desktop.
+- It takes voice command and follows to automate them, just like your personal virtual assistant for Desktop.
+- Currently developed only for Windows.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
 ### Built With
-Majority of this project is made via Python, Selenium & other python based libraries
+Majority of this project is made via Python, Selenium & other python based frameworks
 
 * [Python](https://www.python.org/)
 * [Selenium](https://www.selenium.dev/)
 * Chrome webdriver
-* GUI
+* [PyQt5](https://www.riverbankcomputing.com/software/pyqt/) - For frontend GUI
+* Qt Designer Software
+* APIs
+
+Libraries used:
+
+* pyttsx3 & speechrecognition (for speaking and listning)
+* pyautogui
+* requests
+* bs4
+* pywikihow
+* pywhatkit
+* geopy & geocoder
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -63,42 +75,64 @@ Majority of this project is made via Python, Selenium & other python based libra
 
 ## Getting Started
 
-There are some requirements for running these programs in any system, Your system must have these tools installed before you run.
+There are some Prerequisites to run these programs in any windows machine.
+- Python 3 or above.
+- Any IDE to run python programs.
 
-### Prerequisites
+### Please follow the given steps for installation
 
-* pip
+* Step:1 - Download
   ```sh
-  pip install selenium
-  pip install requirements.txt
+  Clone/Download the repo in your local machine
   ```
-  
-  
+* Step:2 - Run cmd
+  ```sh
+  Open cmd/terminal in the downloaded directory
+  ```  
+* Step:3 - Run the following command
+  ```sh
+  pip install -r requirements.txt
+  ```   
+* Step:4 - Done
+  ```sh
+  Run WALTER.py
+  ```  
+ 
 ## Usage
 
-It will  do most of the tasks on voice command like :
+It will perform most of the tasks on voice command like :
+- Greet/welcome messages & commands
 - Sending E-Mails
+- Weather report
 - Telling Latest News
 - Crawling to any website  (Based on Voice command)
-- Showing weather
+- Taking screenshot
+- Performing google search
 - Opening Desktop Apps
-- & many others too
+- & many others.
 
-As of now we are still working on maximizing the tasks it can do and add more and more functionality to it.
+Detailed description:
 
+
+It can not only perform simple tasks like opening apps, websites, google search, showing weather, temperature, telling jokes, playing literally any song available on internet, taking screenshots and many more.
+
+
+But is also capable of doing extensive and complex tasks like Voice typing, fetching weather data via API, answering any question via search engine API and web scrapping, sending mails to anyone* , joining class meet automatically based on your schedule & time zone, creating a new meet, telling exact location based on user’s IP, automating web browsers and many more. And that’s all without even touching the computer, just by Voice commands.
+
+
+As of now we are still working on maximizing the tasks it can do and adding more and more functionality to it.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
 ## Roadmap
 
-- [x] Add readme documentation
-- [] Add basic functionalities
-- [] Add Additional features
+- [x] Add readme documentation (Done)
+- [x] Add basic functionalities (Done)
+- [x] Add Additional features (Working)
+- [ ] Improve efficiency and speed. (Working)
 - Supports
     - [x] Windows
-    - [] Mac
-    - [] Linux
 
 
 ## License
@@ -113,13 +147,13 @@ MIT License.
 ## Team
 
 Names
-- Keshav kumar Jha (20bcs070)
+- Keshav Kumar Jha (20bcs070)
+- Brij Vaghani (20bcs033)
 - Lucky Yadav (20bcs077)
-- Daulat  Kumar Jha (20bcs037)
-- Brij
-- Hemant
-- Rohan
-- Sparsh
-- Tejas
+- Daulat Kumar Jha (20bcs037)
+- Hemant (20bcs058)
+- Rohan Singh (20bcs113)
+- Sparsh Jain (20bcs127)
+- Tejas Kedare (20bcs134)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
