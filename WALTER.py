@@ -1,48 +1,24 @@
-from features import *
-
-state = ""
-chat = []
-chat_prev = []
-
-def chatWalter(query):
-    global chat_prev
-    chat_prev = chat.copy()
-    chat.append("Walter: " + query)
-
-def chatUser(query):
-    global chat_prev
-    chat_prev = chat.copy()
-    chat.append("User: " + query)
-    sleep(1)
-
-def speak(audio):
-    # defining the speak function so that our assistant can speak any string given as input
-    engine = pyttsx3.init('sapi5')  # defining the engine to speak given string
-    voice = engine.getProperty('voices')
-    # seting voice of any inbuilt system voice like David/Zeera
-    engine.setProperty('voice', voice[0].id)
-    # print(voice[0])     # to know the no of voices in system
-    engine.setProperty('rate', 188)  # set the speed of voice
-    global state
-    state = "Speaking..."
-    engine.say(audio)
-    print(audio)
-    chatWalter(audio)
-    # Runs an event loop until all commands queued up until this method call complete
-    engine.runAndWait()
-
-def wishMe():
-    #function wishme will wish the user according to the time and weather
-    # declaring the hour variable to  get the current hour
-    hour = int(datetime.datetime.now().hour)
-    # declaring the strTime variable to  get the current time according to mearidain
-    strTime = datetime.datetime.now().strftime("%I:%M %p")
-    if hour >= 0 and hour < 12:
-        speak("Hello sir, Good Morning." )
-    elif hour >= 12 and hour < 18:
-        speak("Hello sir, Good Afternoon.")
-    else:
-        speak("Hello sir, Good Evening.")
+#---------------------------------For Features----------------------------------------
+import pyautogui
+from features.basic import *
+from features import walter
+from features.sense import *
+import os
+import sys
+from features.search_web import findAns
+from features.win_automate import WindowAutomate
+#---------------------------------For GUI -------------------------------------------
+import PyQt5
+from PyQt5.QtCore import QTime, QTimer, QDate, Qt
+from PyQt5 import QtWidgets, QtCore, QtGui
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.uic import loadUiType
+from Walter_UI import Ui_Walter
+#-----------------------------------------------------------------------------------
+import pyjokes #for jokes
+#-----------------------------------------------------------------------------------
 
 class MainThread(QThread):
     def __init__(self) -> None:
@@ -50,281 +26,119 @@ class MainThread(QThread):
         super(MainThread, self).__init__()
 
     def run(self):
-        wishMe()
+        self.obj = walter()
+        self.obj.wishuser()
         self.task()
-    
-    def takecomand(self):
-        #Defining function to take the voice as input and converting it to text
-        take = sr.Recognizer()
-        # It takes Speech as input from microphone
-        with sr.Microphone() as source:
-            take.adjust_for_ambient_noise(source)  # ignoring the background noise
-            # seconds of non-speaking audio before a phrase is considered complete
-            take.pause_threshold = 0.7
-            take.energy_threshold = 500  # minimum audio energy to consider for recording
-            global state        
-            state = "Listening...."
-            print(state)
-            audio = take.listen(source)
-        try:
-            state = "Working...."
-            print(state)
-            query = take.recognize_google(audio, language='en-in')
-            #Performs speech recognition on "audio_data", using the Google Speech Recognition API.
-            print("User said :", query)
-            
-        except Exception as e:
-            state = "Speak again..."
-            print(state)
-            return "None"
-        chatUser(query)
-        return query.lower()  # returning the query in lower alphabets
 
     def task(self):
         # running the while loop infinite times
-        global chat
         while True:
-            self.query = self.takecomand()
+            self.query = takecomand()
+            # if user chats (conversation)
+            chatresponse = self.obj.chatwalter(self.query)
 
-            #if user asks intro/greet
-            if self.query in command_info:
-                speak(listToString(random.choices(info)))
-            
-            elif self.query in command_greet:
-                speak(listToString(random.choices(greet)))
-            
-            elif self.query in chat_1:
-                speak(listToString(random.choices(chat_1_replay)))                                
-            
-            elif self.query in chat_2:
-                speak(listToString(random.choices(chat_2_replay)))                            
-            
-            elif self.query in chat_3:
-                speak(listToString(random.choices(chat_3_replay)))                                
-            
-            elif self.query in chat_4:
-                speak(listToString(random.choices(chat_4_replay)))
+            # if not in chatbot
+            # greet and perform task simultaneously - (can run multiple command at once)
+            # eg- hello walter, what is the temperature?
+            if chatresponse == 0:
+                self.query = self.obj.efficient(self.query)
 
-            #greet and perform task simultaneously
-            #eg- hello walter, what is the temperature?
-            #eg- good morning walter, how is the weather?
-            elif 'hello' in self.query or 'hi' in self.query or 'good morning' in self.query:
-                wishMe()
-                #replacing unnecessary key words from query
-                self.query = self.query.replace("hello", "")
-                self.query = self.query.replace("hi", "")
-                self.query = self.query.replace("good morning", "")
-                self.query = self.query.replace("walter", "")
-                #correcting mispronounciations
-                #sometimes it misunderstands 'Walter' as these: (due to indian accent)
-                self.query = self.query.replace("water", "")
-                self.query = self.query.replace("walton", "")
-                self.query = self.query.replace("wallpaper", "")
+            if (WindowAutomate(self.query)!= 0):
+                print("Done !")
+
+            elif 'open' in self.query or 'launch' in self.query:
+                self.obj.open(self.query)
+                
+            elif 'close' in self.query or 'terminate' in self.query:
+                self.obj.close(self.query)
             
-            if 'open youtube' in self.query or 'launch youtube' in self.query:
-                speak(listToString(random.choices(['Opening Youtube', 'Launching Youtube'])))
-                # taking the link of youtube from the folder url.txt using access.py file
-                # opening youtube in defult webbrowser 
-                webbrowser.open_new_tab(access.url("youtube_url"))
-
-            elif 'open google' in self.query:
-                speak("Sir, are you looking for any website?")
-                ans=self.takecomand()
-                if 'yes' in ans:
-                    speak("Sir, which website are you looking for?")
-                    search=self.takecomand()
-                    webbrowser.open_new_tab(search + ".com")
-                else:
-                    speak("Sir, what should i search for?")
-                    search=self.takecomand()
-                    webbrowser.open_new_tab(search)
-
-            elif 'open classroom' in self.query:
-                webbrowser.open_new_tab(access.url("classroom_url"))
-
-            elif 'play music' in self.query or 'hit some music' in self.query:
-                self.music_dir=access.path("music_dir_path")
-                self.songs=os.listdir(self.music_dir)
-                os.startfile(os.path.join(
-                self.music_dir, random.choice(self.songs)))
-
-            elif 'date' in self.query:
-                self.today= datetime.date.today()
-                self.d2 = self.today.strftime("%B %d, %Y")
-                self.day=datetime.datetime.now().strftime("%A")
-                speak("Today is " + self.day + '. ' + self.d2)
+            elif 'the date' in self.query:
+                speak("Today is " + self.obj.day() + ', ' + self.obj.date())
 
             elif 'the time' in self.query:
-                self.strTime = datetime.datetime.now().strftime("%I %M %p")
-                speak("Sir, The time is " + self.strTime)
-
-            elif 'open notepad' in self.query or 'launch notepad' in self.query:
-                speak(listToString(random.choices(['Opening Notpad', 'Launching Notpad'])))
-                os.startfile(access.path("notepad_path"))
-
-            elif 'open vs code' in self.query or 'launch vs code' in self.query:
-                speak(listToString(random.choices(['Opening VS Code', 'Launching VS Code'])))
-                self.codepath=access.path("vs_code_path")
-                os.startfile(self.codepath)
+                # declaring the strTime variable to  get the current time according to mearidain
+                speak("Sir, The current time is " + self.obj.time())
                 
             elif 'screenshot' in self.query or 'take a screenshot' in self.query:
                 cwd = os.getcwd()
-                pyautogui.screenshot(cwd + r'\Screenshots\image' + str(self.x)+'.png')
+                pyautogui.screenshot(cwd + r'\image\Screenshot' + str(self.x)+'.png')
+                speak("Screenshot is saved as image" + str(self.x))
                 self.x += 1
 
             elif 'temperature' in self.query:
-                speak(GetTemperature(self.query))
+                speak(self.obj.temperature(self.query))
 
             elif "weather" in self.query:
-                speak(GetWeather(self.query))
+                speak(self.obj.weather(self.query))
                 # chat.append("Walter: " + chatmsg2) #prints weather in chatbox
 
             elif "how to" in self.query:
-                speak(howto(self.query))
+                speak(self.obj.howto(self.query))
 
             elif "search" in self.query:
-                self.query = self.query.replace("search", "")
-                self.query = self.query.replace(" for ", "")
-                self.query = self.query.replace(" about ", "")
-                self.query = self.query.replace(" on ", "")
-                self.query = self.query.replace("google", "")
-                speak("Showing the search results for" + self.query)
-                googlesearch(self.query)
+                speak(self.obj.web_search(self.query))
+            
             elif "near" in self.query or 'nearby' in self.query:
-                speak(nearby(self.query))
+                speak(self.obj.near(self.query))
                 # chat.append("Walter: "+ nearby(self.query))   #adding msg to chatbox
 
             elif "joke" in self.query or 'jokes' in self.query:
                 speak(pyjokes.get_joke())
-                self.query = self.takecomand()
+                self.query = takecomand()
                 while 'one more' in self.query or 'another one' in self.query or 'once more' in self.query:
                     speak(pyjokes.get_joke())
-                    self.query = self.takecomand()
+                    self.query = takecomand()
 
             elif 'send mail' in self.query:
                 try:
-                    self.query=self.query.replace("send", "")
-                    self.query=self.query.replace("mail", "")
-                    self.query=self.query.replace("to", "")
-                    self.query=self.query.replace(" ", "")
-                    obj = mail()
-                    obj.login()
-                    speak("What subject should i add?")
-                    self.subject = self.takecomand()
-                    speak("Sir what should i say?")
-                    self.content = self.takecomand()
-                    self.to_email=access.mail_details(self.query)
-                    obj.compose(self.subject,self.content,self.to_email)
-                    obj.send()
+                    self.obj.send_mail(self.query)
                     speak("Sir, the mail is sent")
                 except Exception as e:
                     speak("Sorry sir. I am not able to send right now")
             
+            elif 'join meet' in self.query or 'create a meet' in self.query or 'create a new meet' in self.query or 'join my class' in self.query:
+                try:
+                    self.obj.join_meet(self.query)
+                except Exception as e:
+                    speak("Sorry sir. I am not able to join meet right now")
+
             elif "my location" in self.query or "where am i" in self.query or "current location" in self.query:
                 try:
-                    ci, st, co = my_location()
+                    ci, st, co = self.obj.my_location()
                     speak(
                         f"Sir, your current location is {ci} city which is in {st} state and country {co}")
 
                 except Exception as e:
-                    speak(
-                        "Sorry sir, I coundn't fetch your current location. Please try again")
+                    speak("Sorry sir, I coundn't fetch your current location. Please try again")
 
-            elif "where is" in self.query:
-                self.query = self.query.replace("where","")
-                self.query = self.query.replace("is","")
-                self.query = self.query.replace("location", "")
-                self.query = self.query.replace("from", "")
-                self.query = self.query.replace("my", "")
-                place = self.query
-                current_loc, target_loc, distance = loc(place)
+            elif "where is" in self.query or 'location of' in self.query or 'distance of' in self.query:
+                current_loc, target_loc, distance = self.obj.location(self.query)
                 city = target_loc["city"]
                 state = target_loc["state"]
                 country = target_loc["country"]
-                sleep(1)
                 try:
-                    res = f"{place} is in {state} state of country {country}. It is {distance} km away from your current location"
+                    res = f"{self.query} is in {state} state of country {country}. It is {distance} km away from your current location"
                     speak(res)
                 except:
                     res = "Sorry sir, I couldn't get the location. Please try again"
                     speak(res)
 
-            elif self.query in command_quit:
-                speak(listToString(random.choices(command_quit_replay)))
-                speakonly("3")
-                speakonly("2")
-                speakonly("1")
-                sys.exit()
+            #battery status
+            elif "battery status" in self.query or "remaining battery" in self.query:
+                speak(str(self.obj.battery_status()))
+                
+            elif "set alarm" in self.query:
+                try:
+                    self.obj.set_alarm(self.query)
+                except Exception as e:
+                    speak("Sorry sir, i am not able to set the alarm.")
 
-            elif "open whatsapp" in self.query:
-                from Whatsapp import openWhatsapp
-                openWhatsapp()
-            
-            elif "minimise whatsapp" in self.query:
-                from Whatsapp import minimizeWhatsapp
-                minimizeWhatsapp()
-            
-            elif "close whatsapp" in self.query:
-                from Whatsapp import closeWhatsapp
-                closeWhatsapp()
-                speak("Whatsapp closed")
-
-            elif "whatsapp message" in self.query:
-                self.query = self.query.replace("whatsapp", "")
-                self.query = self.query.replace("message", "")
-                self.query = self.query.replace("to", "")
-                self.Name = str(self.query)
-                speak(f"Whats the message for {self.Name}")
-                self.message = self.takecomand()
-                speak(f"Sending text to {self.Name}")
-                from Whatsapp import WhatsappMessage
-                WhatsappMessage(self.Name, self.message)
-            
-            elif "video call" in self.query:
-                self.query = self.query.replace("video", "")
-                self.query = self.query.replace("call", "")
-                self.query = self.query.replace("whatsapp", "")
-                self.query = self.query.replace("to", "")
-                self.Name = str(self.query)
-                speak(f"Making Video call to {self.Name}")
-                from Whatsapp import WhatsappVideo
-                WhatsappVideo(self.Name)
-                speak("Video Call ended")
-
-            elif "call" in self.query:
-                self.query = self.query.replace("call", "")
-                self.query = self.query.replace("whatsapp", "")
-                self.query = self.query.replace("to", "")
-                self.Name = str(self.query)
-                speak(f"Making call to {self.Name}")
-                from Whatsapp import WhatsappCall
-                WhatsappCall(self.Name)
-                speak("Call Ended")
+            elif 'who' in self.query or 'what' in self.query or 'when' in self.query or 'where' in self.query or 'how' in self.query or 'why' in self.query or 'which' in self.query:
+                #finding answers from API/web/wikipedia
+                if chatresponse == 0 :
+                    speak(findAns(self.query))
             
 
-            elif "open chat" in self.query:
-                self.query = self.query.replace("open", "")
-                self.query = self.query.replace("whatsapp", "")
-                self.query = self.query.replace("chat", "")
-                self.query = self.query.replace("of", "")
-                self.Name = str(self.query)
-                speak(f"Opening Chat of {self.Name}")
-                from Whatsapp import WhatsappOpenChat
-                WhatsappOpenChat(self.Name)
-
-            elif "create a group" in self.query:
-                self.query = self.query.replace("and", " ")
-                speak("Please name the members to be added")
-                self.query = self.takecomand()
-                self.Names = list(self.query.split(" "))
-                speak(f"Whats the name for group")
-                self.grp_name = self.takecomand()
-                from Whatsapp import WhatsappGroup
-                WhatsappGroup(self.Names, self.grp_name)
-                speak(f"Group named {self.grp_name} is created")
-
-
-    
 startexecution = MainThread()
 
 class Main(QMainWindow):
@@ -342,7 +156,7 @@ class Main(QMainWindow):
         lable_date = current_date.toString(Qt.ISODate)
         self.ui.Date.setText(lable_date)
         self.ui.Time.setText(lable_time)
-        self.ui.state_of_assistant.setText(state)
+        self.ui.state_of_assistant.setText(listToString(state))
         for item in chat:
             global chat_prev
             if len(chat) != len(chat_prev):
