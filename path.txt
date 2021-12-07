@@ -1,5 +1,0 @@
-chromedriver_path,"C:\Program Files (x86)\chromedriver.exe"
-vs_code_path,"C:\Users\kesha\AppData\Local\Programs\Microsoft VS Code\\Code.exe"
-music_dir_path,"G:\\Music"
-chrome_path,"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
-notepad_path,"C:\\WINDOWS\\system32\\notepad.exe"
