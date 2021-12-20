@@ -73,7 +73,7 @@ def wishMe():
     #function wishme will wish the user according to the time and weather
    # declaring the hour variable to  get the current hour
     temp, sky = weather.GetTemperature("weather")
-    temp = temp.replace("The current temperature at your location is","Temperature is ")
+    temp = temp.replace("The current temperature at your location is ","Temperature is ")
     val = f"\n{temp} and the sky is {sky}."
     try:
         hour = int(datetime.datetime.now().hour)

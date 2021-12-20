@@ -26,7 +26,7 @@ def loc(place):
     distance = str(distance.split(' ', 1)[0])
     distance = round(float(distance), 2)
 
-    return current_loc, target_loc, distance
+    return target_loc, distance, place
 
 
 def my_location():

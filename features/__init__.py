@@ -8,7 +8,9 @@ from features import basic
 from features import sense
 from features import chatbot
 from features import date_time
-
+#---------------------------------------------------
+import threading
+#---------------------------------------------------
 class walter:
     def __init__(self):
         pass
@@ -95,8 +97,8 @@ class walter:
         return val
     
     def location(self, query):
-        current_loc, target_loc, distance = location.loc(query)
-        return current_loc, target_loc, distance
+        target_loc, distance, place = location.loc(query)
+        return target_loc, distance,place
 
     def my_location(self):
         city, state, country = location.my_location()
@@ -131,8 +133,8 @@ class walter:
         timing = timing.replace("set alarm to ", "")
         timing = timing.replace(".", "")
         timing = timing.upper()
-        sense.speak("Alarm is set for  "+timing)
-        t1 = basic.threading.Thread(target=basic.alarm, args=(timing,))
+        sense.speak("Alarm is set for "+timing)
+        t1 = threading.Thread(target=basic.alarm, args=(timing,))
         t1.start()
 
     def chatwalter(self,query):

@@ -1,4 +1,4 @@
-# Desktop-Assistant<br />
+<br />
 <div align="center">
 
   <h3 align="center">Desktop Assistant Project</h3>
@@ -6,14 +6,12 @@
   <p align="center">
     Virtual Assistant which can control & automate your PC on voice commands.
     <br />
-    <a href="https://github.com/LuckYYadav15/Desktop-Assistant/issues"><strong>Suggest a feature »</strong></a>
-    <br />
     <br />
     
   </p>
 </div>
 
-
+[Project Report](https://docs.google.com/document/d/1qvrIWh1b0dRF_al1kI0ByCmzfFQCa_haM2fAzWonNd0/)
 <details>
   <summary>Table of Contents</summary>
   <ol>
@@ -104,7 +102,7 @@ It will perform most of the tasks on voice command like :
 - Greet/welcome messages & commands
 - Sending E-Mails
 - Weather report
-- Latest News
+- Telling Latest News
 - Crawling to any website  (Based on Voice command)
 - Taking screenshot
 - Performing google search
@@ -129,9 +127,8 @@ As of now we are still working on maximizing the tasks it can do and adding more
 
 - [x] Add readme documentation (Done)
 - [x] Add basic functionalities (Done)
-- [x] Add GUI files to project (Done)
-- [x] Add Additional features (Working)
-- [x] Improve efficiency and speed. (Working)
+- [x] Add Additional features (Done)
+- [x] Improve efficiency and speed. (Done)
 - Supports
     - [x] Windows
 
@@ -148,14 +145,13 @@ MIT License.
 ## Team
 
 Names
-
-- Brij Vaghani     (20bcs033)
-- Daulat Kumar Jha (20bcs037)
-- Hemant Dhawale   (20bcs058)
 - Keshav Kumar Jha (20bcs070)
-- Lucky Yadav      (20bcs077)
-- Rohan Singh      (20bcs113)
-- Sparsh Jain      (20bcs127)
-- Tejas Kedare     (20bcs134)
+- Brij Vaghani (20bcs033)
+- Lucky Yadav (20bcs077)
+- Daulat Kumar Jha (20bcs037)
+- Hemant (20bcs058)
+- Rohan Singh (20bcs113)
+- Sparsh Jain (20bcs127)
+- Tejas Kedare (20bcs134)
 
 <p align="right">(<a href="#top">back to top</a>)</p>

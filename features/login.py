@@ -89,7 +89,7 @@ class mail(log):
             speak("Sir, the mail is sent")
             sleep(2)
         except Exception as e:
-            print(e)    
+            speak("Sorry sir. I am not able to send right now")    
         self.driver.close()  # closing the driver
 
 class meet(log):

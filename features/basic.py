@@ -4,7 +4,6 @@ import wmi
 import datetime
 from playsound import playsound
 import os
-import threading
 
 state = ["Speaking..."]
 chat = []
@@ -59,17 +58,20 @@ def alarm(timing):
     hour_alaram = int(hour_alaram)
     minute_alarm = alarmtime[3:5]
     minute_alarm = int(minute_alarm)
+    cwd = os.getcwd()
+    currentpath = cwd + r"\features\resources\a1.mp3"
     while True:
         if timing != None:
             while True:
-                cwd = os.getcwd()
-                currentpath = cwd + r"\features\resources\a1.mp3"
                 if hour_alaram == datetime.datetime.now().hour:
 
-                    if minute_alarm == datetime.datetime.now().minute and x <= 4:
+                    if minute_alarm == datetime.datetime.now().minute:
                         print("alarm running")
                         playsound(currentpath)
                         x += 1
+                    if x>3:
+                        timing = 0
+                        return
 
                     elif minute_alarm < datetime.datetime.now().minute:
                         timing = 0

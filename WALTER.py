@@ -61,8 +61,8 @@ class MainThread(QThread):
                 
             elif 'screenshot' in self.query or 'take a screenshot' in self.query:
                 cwd = os.getcwd()
-                pyautogui.screenshot(cwd + r'\image\Screenshot' + str(self.x)+'.png')
-                speak("Screenshot is saved as image" + str(self.x))
+                pyautogui.screenshot(cwd + r'\image\Image' + str(self.x)+'.png')
+                speak("Screenshot is saved as Image" + str(self.x))
                 self.x += 1
 
             elif 'temperature' in self.query:
@@ -90,11 +90,7 @@ class MainThread(QThread):
                     self.query = takecomand()
 
             elif 'send mail' in self.query:
-                try:
-                    self.obj.send_mail(self.query)
-                    speak("Sir, the mail is sent")
-                except Exception as e:
-                    speak("Sorry sir. I am not able to send right now")
+                self.obj.send_mail(self.query)
             
             elif 'join meet' in self.query or 'create a meet' in self.query or 'create a new meet' in self.query or 'join my class' in self.query:
                 try:
@@ -112,12 +108,12 @@ class MainThread(QThread):
                     speak("Sorry sir, I coundn't fetch your current location. Please try again")
 
             elif "where is" in self.query or 'location of' in self.query or 'distance of' in self.query:
-                current_loc, target_loc, distance = self.obj.location(self.query)
-                city = target_loc["city"]
+                target_loc, distance, place = self.obj.location(self.query)
+                # city = target_loc["city"]
                 state = target_loc["state"]
                 country = target_loc["country"]
                 try:
-                    res = f"{self.query} is in {state} state of country {country}. It is {distance} km away from your current location"
+                    res = f"{place} is in {state} state of country {country}. It is {distance} km away from your current location"
                     speak(res)
                 except:
                     res = "Sorry sir, I couldn't get the location. Please try again"
